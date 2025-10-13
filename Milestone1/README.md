@@ -1,4 +1,4 @@
-# Milestone 1 - Web Scraping with BeautifulSoup
+# Milestone 1 - BeautifulSoup
 
 This project contains 8 practice tasks for learning web scraping and HTML parsing using Python and BeautifulSoup.
 
