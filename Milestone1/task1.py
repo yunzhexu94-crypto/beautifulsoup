@@ -1,40 +1,56 @@
 # task1.py
-# Goal: read a file and then save it back out but prettier.
+# This script is supposed to download a webpage from the internet
 
 import sys
+import requests
 from bs4 import BeautifulSoup
 
-# need to make sure the user gave us a file
+# check if the user gave me a URL
 if len(sys.argv) != 2:
-    print("Error: You need to provide a filename.")
-    print("Usage: python task1.py <filename>")
+    print("You need to give me a website URL to run this!")
+    print("Usage: python task1.py <website_url>")
+    # if not, then exit
     exit()
 
-input_filename = sys.argv[1]
-output_filename = "output_task1_pretty.html"
+# Get the url from the command line
+url = sys.argv[1]
+# set the filename to save to
+output_file = "downloaded_page.html"
 
-# print("DEBUG: Reading file:", input_filename)
+print("Downloading from " + url + "...")
 
+# use a try block so the program doesn't crash if something goes wrong
 try:
-    # open the file to read it
-    file_handle = open(input_filename, 'r', encoding='utf-8')
-    file_contents = file_handle.read()
-    file_handle.close() # remember to close it
+    # --- 1. Download the page ---
+    # send the request to get the page content
+    response = requests.get(url)
+    # store the page content in a variable
+    html = response.text
+    print("Download successful!")
 
-    # make the soup
-    soup = BeautifulSoup(file_contents, 'html.parser')
+    # --- 2. Process the page ---
+    # give the downloaded html text to BeautifulSoup to handle
+    soup = BeautifulSoup(html, 'html.parser')
 
-    # use the prettify function
-    pretty_version = soup.prettify()
+    # I'll check the title here to make sure it's working
+    # print(soup.title) 
 
-    # now write it to a new file
-    with open(output_filename, 'w', encoding='utf-8') as f:
-        f.write(pretty_version)
+    # use prettify to make it look nice
+    pretty_text = soup.prettify()
 
-    print("Successfully created prettified file: " + output_filename)
+    # --- 3. Save the file ---
+    print("Saving to file: " + output_file)
+    # open the file for writing
+    f = open(output_file, 'w', encoding='utf-8')
+    # write the nice text into it
+    f.write(pretty_text)
+    # !! remember to close the file
+    f.close()
 
-except FileNotFoundError:
-    print("Error! The file '" + input_filename + "' was not found.")
+    print("Done!")
+
 except Exception as e:
-    print("An unknown error occurred.")
-    print(e)
+    # if any of the steps above went wrong, this code will run
+    print("!!! Whoops, something went wrong !!!")
+    print("The error was: " + str(e))
+    print("Please check if your URL is correct and if your internet is working.")
