@@ -24,3 +24,6 @@ args = "cd Milestone1 && python task1.py https://quotes.toscrape.com"
 
 [workflows.workflow.metadata]
 outputType = "console"
+
+[nix]
+packages = ["python39Packages.conda", "python39Packages.pytest"]
