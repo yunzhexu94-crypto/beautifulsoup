@@ -26,8 +26,7 @@ try:
     # Remember to close the file
     f.close()
 
-    # The soup object now only has <a> tags
-    # Loop and print all the links we found
+
     for link in soup:
         print(link)
 
