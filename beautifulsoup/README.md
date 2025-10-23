@@ -116,6 +116,26 @@ beautifulsoup:~/ git push -u origin main
 
 To go beyond the basics, [comprehensive documentation is available](https://www.crummy.com/software/BeautifulSoup/bs4/doc/).
 
+
+# Milestone 2, Part 2: Source Code Analysis
+
+Here is the location of the API definitions used in Milestone 1 and Milestone 2 (Part 1).
+
+*Note: Line numbers refer to the original code commit before any modifications for Part 3.*
+
+## API Locations
+
+| API | File | Line Number |
+| --- | --- | --- |
+| `class BeautifulSoup` | `bs4/__init__.py` | 133 |
+| `class SoupStrainer` | `bs4/filter.py` | 313 |
+| `def prettify` | `bs4/element.py` | 2601 |
+| `def find_all` | `bs4/element.py` | 137 |
+| `def find_parent` | `bs4/element.py` | 992 |
+| `def get` | `bs4/element.py` | 2160 |
+| `def replace_with` | `bs4/element.py` | 552 |
+
+
 # Links
 
 * [Homepage](https://www.crummy.com/software/BeautifulSoup/bs4/)
