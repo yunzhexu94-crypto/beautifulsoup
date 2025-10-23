@@ -1,4 +1,106 @@
 # Milestone-2
+
+## How to Run the Programs
+
+This section provides exact command-line instructions to run all M2 task programs.
+
+### Prerequisites
+
+1. **Navigate to the beautifulsoup directory:**
+```bash
+cd beautifulsoup
+```
+
+2. **Set Python Path (REQUIRED):**
+The modified bs4 library must be in your Python path to use the new SoupReplacer feature:
+```bash
+export PYTHONPATH=/home/runner/workspace/beautifulsoup:$PYTHONPATH
+```
+
+### Running Each Task
+
+#### Task 2: Find All Links
+Finds and displays all `<a>` tags using SoupStrainer.
+
+**Command:**
+```bash
+cd beautifulsoup
+PYTHONPATH=/home/runner/workspace/beautifulsoup:$PYTHONPATH python apps/m2/task2.py apps/m2/test.html
+```
+
+#### Task 3: List All Tags
+Lists all HTML tags (excluding text) using SoupStrainer.
+
+**Command:**
+```bash
+cd beautifulsoup
+PYTHONPATH=/home/runner/workspace/beautifulsoup:$PYTHONPATH python apps/m2/task3.py apps/m2/test.html
+```
+
+#### Task 4: Find Tags with ID Attribute
+Finds all tags that have an `id` attribute using SoupStrainer.
+
+**Command:**
+```bash
+cd beautifulsoup
+PYTHONPATH=/home/runner/workspace/beautifulsoup:$PYTHONPATH python apps/m2/task4.py apps/m2/test.html
+```
+
+#### Task 6: Replace Tags with SoupReplacer
+Replaces all `<b>` tags with `<blockquote>` tags during parsing using the new SoupReplacer API.
+
+**Command:**
+```bash
+cd beautifulsoup
+PYTHONPATH=/home/runner/workspace/beautifulsoup:$PYTHONPATH python apps/m2/task6.py apps/m2/test.html
+```
+
+### Quick Run - All Tasks at Once
+
+**Option 1: Using the Provided Script**
+
+Simply run the provided bash script:
+
+```bash
+cd beautifulsoup/apps/m2
+bash run_all_tasks.sh
+```
+
+**Option 2: Copy and Paste Commands**
+
+Copy and paste these commands to run all tasks sequentially:
+
+```bash
+cd beautifulsoup
+export PYTHONPATH=/home/runner/workspace/beautifulsoup:$PYTHONPATH
+
+echo "=== Task 2: Finding Links ==="
+python apps/m2/task2.py apps/m2/test.html
+
+echo ""
+echo "=== Task 3: Listing All Tags ==="
+python apps/m2/task3.py apps/m2/test.html
+
+echo ""
+echo "=== Task 4: Finding Tags with ID ==="
+python apps/m2/task4.py apps/m2/test.html
+
+echo ""
+echo "=== Task 6: SoupReplacer Demo ==="
+python apps/m2/task6.py apps/m2/test.html
+```
+
+### Using Your Own HTML File
+
+To test with your own HTML file, replace `apps/m2/test.html` with your file path:
+
+```bash
+cd beautifulsoup
+PYTHONPATH=/home/runner/workspace/beautifulsoup:$PYTHONPATH python apps/m2/task2.py /path/to/your/file.html
+```
+
+---
+
 # Part 2: Source Code Analysis
 
 Here is the location of the API definitions used in Milestone 1 and Milestone 2 (Part 1).
