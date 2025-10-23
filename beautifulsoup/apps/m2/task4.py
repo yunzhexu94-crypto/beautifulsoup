@@ -3,7 +3,6 @@ from bs4 import BeautifulSoup, SoupStrainer
 
 # Task 4: Find all tags with an id
 
-# attrs={"id": True} means "any tag that has an id attribute"
 s = SoupStrainer(attrs={"id": True})
 
 # Check for filename
