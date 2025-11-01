@@ -133,19 +133,70 @@ from bs4._warnings import (
 # --- add new class ---
 class SoupReplacer(object):
     """
-    A SoupReplacer tells BeautifulSoup to replace one tag with another
-    during parsing.
-    """
+    (M3) A configuration object used to transform tags during 
+    BeautifulSoup parsing.
 
-    def __init__(self, og_tag, alt_tag):
+    It can perform two types of transformations:
+    1. (M2) Simple tag name replacement (e.g., 'b' -> 'blockquote').
+    2. (M3) Complex, function-based transformations (xformers).
+    """
+    def __init__(self, *args, name_xformer=None, attrs_xformer=None, xformer=None):
         """
         Constructor.
-        :param og_tag: The tag name to replace (e.g., "b")
-        :param alt_tag: The new tag name (e.g., "blockquote")
-        """
-        self.og_tag = og_tag
-        self.alt_tag = alt_tag
 
+        For M2 (Simple Replacement):
+        :param args: Paired (og_tag, alt_tag) arguments, e.g. SoupReplacer("b", "blockquote")
+
+        For M3 (Functional Transforms):
+        :param name_xformer: function (tag) -> new_name_str
+        :param attrs_xformer: function (tag) -> new_attrs_dict
+        :param xformer: function (tag) -> None (for side-effect modifications)
+        """
+
+        # --- M2 Logic (for backward compatibility) ---
+        self.replacement_pairs = {}
+        if args:
+            if len(args) == 2:
+                # Support M2's (og_tag, alt_tag) signature
+                self.replacement_pairs[args[0]] = args[1]
+            elif len(args) > 2 and len(args) % 2 == 0:
+                # Support multiple (og_tag, alt_tag) pairs
+                it = iter(args)
+                for og_tag, alt_tag in zip(it, it):
+                    self.replacement_pairs[og_tag] = alt_tag
+            elif args:
+                 raise ValueError("SoupReplacer constructor requires paired (og_tag, alt_tag) arguments")
+
+        # --- M3 Logic ---
+        self.name_xformer = name_xformer
+        self.attrs_xformer = attrs_xformer
+        self.xformer = xformer
+
+    def transform_tag(self, tag):
+        """
+        A helper method to apply all transformations inside the parser.
+        The parser will call this method.
+        """
+
+        # 1. Apply M2 simple replacement first (if present)
+        if tag.name in self.replacement_pairs:
+            tag.name = self.replacement_pairs[tag.name]
+
+        # 2. Apply M3 name_xformer (if present)
+        if self.name_xformer:
+            new_name = self.name_xformer(tag)
+            if new_name:
+                tag.name = new_name
+
+        # 3. Apply M3 attrs_xformer (if present)
+        if self.attrs_xformer:
+            new_attrs = self.attrs_xformer(tag)
+            if new_attrs is not None:
+                tag.attrs = new_attrs
+
+        # 4. Finally, apply M3 xformer (for side effects)
+        if self.xformer:
+            self.xformer(tag)
 
 # --- end ---
 
@@ -1034,12 +1085,34 @@ class BeautifulSoup(Tag):
         # print("Start tag %s: %s" % (name, attrs))
         self.endData()
 
-        # --- add ---
-        # 检查 replacer 是否存在，并且当前标签名是否匹配
-        if self.soup_replacer and name == self.soup_replacer.og_tag:
-            # 如果匹配，就用新标签名替换旧标签名
-            name = self.soup_replacer.alt_tag
-        # --- end ---
+        # --- M2/M3 Logic Start ---
+        # Apply transformations BEFORE creating the tag
+        if self.soup_replacer:
+            # Apply M2 simple replacement first
+            if name in self.soup_replacer.replacement_pairs:
+                name = self.soup_replacer.replacement_pairs[name]
+            
+            # Create a minimal dummy object for xformers
+            class TempTag:
+                pass
+            temp = TempTag()
+            temp.name = name
+            temp.attrs = dict(attrs) if attrs else {}
+            
+            # Apply M3 name_xformer
+            if self.soup_replacer.name_xformer:
+                new_name = self.soup_replacer.name_xformer(temp)
+                if new_name:
+                    name = new_name
+                    temp.name = name  # Update temp for next xformer
+            
+            # Apply M3 attrs_xformer
+            if self.soup_replacer.attrs_xformer:
+                temp.name = name  # Ensure temp has the latest name
+                new_attrs = self.soup_replacer.attrs_xformer(temp)
+                if new_attrs is not None:
+                    attrs = new_attrs
+        # --- M2/M3 Logic End ---
 
         if (self.parse_only and len(self.tagStack) <= 1 and
                 not self.parse_only.allow_tag_creation(nsprefix, name, attrs)):
@@ -1062,6 +1135,12 @@ class BeautifulSoup(Tag):
             sourcepos=sourcepos,
             namespaces=namespaces,
         )
+
+        # --- M3 xformer (side-effects only, after tag is created) ---
+        if self.soup_replacer and self.soup_replacer.xformer:
+            self.soup_replacer.xformer(tag)
+        # --- M3 Logic End ---
+        
         if tag is None:
             return tag
         if self._most_recent_element is not None:
@@ -1080,6 +1159,26 @@ class BeautifulSoup(Tag):
         """
         # print("End tag: " + name)
         self.endData()
+        
+        # --- M2/M3 Logic: Transform end tag name ---
+        # Apply the SAME transformations as start tags
+        if self.soup_replacer:
+            # Apply M2 simple replacement
+            if name in self.soup_replacer.replacement_pairs:
+                name = self.soup_replacer.replacement_pairs[name]
+            
+            # Apply M3 name_xformer
+            if self.soup_replacer.name_xformer:
+                class TempTag:
+                    pass
+                temp = TempTag()
+                temp.name = name
+                temp.attrs = {}
+                new_name = self.soup_replacer.name_xformer(temp)
+                if new_name:
+                    name = new_name
+        # --- M2/M3 Logic End ---
+        
         self._popToTag(name, nsprefix)
 
     def handle_data(self, data: str) -> None:
