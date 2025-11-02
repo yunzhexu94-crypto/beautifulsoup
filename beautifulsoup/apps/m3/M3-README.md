@@ -6,6 +6,23 @@
 
 ---
 
+
+**A. Run the Unit Tests (M3 Test Cases):**
+
+This command will run the 6 test cases for the M3 API.
+
+```bash
+cd beautifulsoup
+python -m bs4.tests.test_soup_replacer_m3
+```
+
+**B. Run the M3 Application (Task 7 Implementation):**
+
+This script requires an input HTML file as an argument.
+```bash
+cd beautifulsoup
+PYTHONPATH=/home/runner/workspace/beautifulsoup:$PYTHONPATH python apps/m3/task7_m3.py apps/m3/test.html
+```
 ### 1. Introduction
 
 This brief outlines my thoughts on the evolution of the `SoupReplacer` API, comparing the simple implementation from Milestone 2 with the advanced functional API from Milestone 3.
