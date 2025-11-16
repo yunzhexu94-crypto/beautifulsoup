@@ -1435,3 +1435,67 @@ class TestWarnings(SoupTest):
                 "'_class' is an unusual attribute name and is a common misspelling for 'class_'"
                 in msg
             )
+            
+# --- MILESTONE 4: ADDED TESTS START ---
+
+class TestSoupIteration(SoupTest):
+    """Tests for Milestone 4: making the soup object iterable."""
+
+    def test_iteration_gets_all_nodes(self):
+        """Test that iteration finds the correct number of nodes."""
+        html = "<html><head></head><body><p>Hello</p><b>World</b></body></html>"
+        soup = self.soup(html, 'html.parser')
+
+        # list() 将会消耗掉迭代器并创建一个列表
+        nodes = list(soup)
+
+        # 让我们数一数:
+        # 1. <html>
+        # 2. <head>
+        # 3. <body>
+        # 4. <p>
+        # 5. "Hello" (NavigableString)
+        # 6. <b>
+        # 7. "World" (NavigableString)
+        # 总共 7 个节点。
+        self.assertEqual(len(nodes), 7)
+
+    def test_iteration_node_types(self):
+        """Test that iteration yields both Tags and NavigableStrings."""
+        html = "<body><p>Hello</p></body>"
+        soup = self.soup(html, 'html.parser')
+        nodes = list(soup)
+
+        # 1. <body>, 2. <p>, 3. "Hello"
+        self.assertEqual(len(nodes), 3)
+        self.assertEqual(nodes[0].name, 'body')
+        self.assertEqual(nodes[1].name, 'p')
+        self.assertTrue(isinstance(nodes[2], NavigableString))
+        self.assertEqual(nodes[2], "Hello")
+
+    def test_iteration_order(self):
+        """Test that iteration follows document order (pre-order traversal)."""
+        html = "<a><b></b><c></c></a>"
+        soup = self.soup(html, 'html.parser')
+        nodes = list(soup)
+
+        # <a>, <b>, <c>
+        self.assertEqual([node.name for node in nodes], ['a', 'b', 'c'])
+
+    def test_iteration_on_empty_document(self):
+        """Test that iterating an empty document yields no nodes."""
+        soup = self.soup("", 'html.parser')
+        nodes = list(soup)
+        self.assertEqual(len(nodes), 0)
+
+    def test_iteration_on_text_only_document(self):
+        """Test iterating a document that is only a string."""
+        soup = self.soup("Just text", 'html.parser')
+        nodes = list(soup)
+
+        # 唯一的节点就是那个 NavigableString
+        self.assertEqual(len(nodes), 1)
+        self.assertEqual(nodes[0], "Just text")
+        self.assertTrue(isinstance(nodes[0], NavigableString))
+
+# --- MILESTONE 4: ADDED TESTS END ---zq

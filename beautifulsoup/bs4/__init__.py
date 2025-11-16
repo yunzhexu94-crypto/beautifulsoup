@@ -849,6 +849,21 @@ class BeautifulSoup(Tag):
         """
         raise NotImplementedError(
             "BeautifulSoup objects don't support insert_after().")
+    
+    def __iter__(self):
+        """
+        Make the BeautifulSoup object iterable (for Milestone 4).
+
+        This allows for a simple loop like:
+        for node in soup:
+            print(node)
+
+        It iterates over all nodes in the parse tree (descendants)
+        in document order.
+        """
+        return iter(self.descendants)
+
+
 
     def popTag(self) -> Optional[Tag]:
         """Internal method called by _popToTag when a tag is closed.
