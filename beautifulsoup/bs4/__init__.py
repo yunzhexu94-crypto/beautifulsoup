@@ -849,19 +849,24 @@ class BeautifulSoup(Tag):
         """
         raise NotImplementedError(
             "BeautifulSoup objects don't support insert_after().")
-    
+        
+        # --- MILESTONE 4: ADDED CODE START ---
     def __iter__(self):
-        """
-        Make the BeautifulSoup object iterable (for Milestone 4).
+            """
+            Make the BeautifulSoup object iterable (for Milestone 4).
 
-        This allows for a simple loop like:
-        for node in soup:
-            print(node)
+            This allows for a simple loop like:
+            for node in soup:
+                print(node)
 
-        It iterates over all nodes in the parse tree (descendants)
-        in document order.
-        """
-        return iter(self.descendants)
+            It iterates over all nodes in the parse tree (descendants)
+            in document order.
+            """
+            # self.descendants is already a generator that perfectly
+            # meets the requirement: it lazy-loads all nodes
+            # one at a time and does not create a list.
+            return iter(self.descendants)
+        # --- MILESTONE 4: ADDED CODE END ---
 
 
 
