@@ -1,5 +1,10 @@
 import sys
 import os
+# We must import 'bs4' itself first so sys.modules is populated
+import bs4
+# Now we can import the class
+from bs4 import BeautifulSoup
+from bs4.element import NavigableString, Tag
 
 # --- Key Step ---
 # Ensure we import our locally modified bs4 library, not the system-installed one
@@ -17,11 +22,7 @@ if project_root not in sys.path:
 
 # ------------------
 
-# We must import 'bs4' itself first so sys.modules is populated
-import bs4
-# Now we can import the class
-from bs4 import BeautifulSoup
-from bs4.element import NavigableString, Tag
+
 
 
 # --- CORRECTED LINE ---
