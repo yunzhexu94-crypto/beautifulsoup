@@ -27,3 +27,4 @@ outputType = "console"
 
 [nix]
 packages = ["python39Packages.conda", "python39Packages.pytest"]
+channel = "stable-25_05"
