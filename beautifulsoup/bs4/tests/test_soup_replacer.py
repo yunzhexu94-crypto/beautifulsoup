@@ -22,16 +22,13 @@ class TestSoupReplacer(SoupTest):
         # 4. 断言（Assert）结果
 
         # 确保 <b> 标签已不存在
-        self.assertIsNone(soup.find("b"), "<b> tag should not exist")
+        assert soup.find("b") is None, "<b> tag should not exist"
 
         # 确保 <blockquote> 标签存在
-        self.assertIsNotNone(soup.blockquote, "<blockquote> tag should exist")
+        assert soup.blockquote is not None, "<blockquote> tag should exist"
 
         # 确保 <blockquote> 标签在正确的位置并有正确的内容
-        self.assertEqual(soup.p.blockquote.string, "bold")
+        assert soup.p.blockquote.string == "bold"
 
         # 确保最终的 HTML 结构正确
-        self.assertEqual(
-            str(soup),
-            "<p>Here is some <blockquote>bold</blockquote> text.</p>"
-        )
+        assert str(soup) == "<p>Here is some <blockquote>bold</blockquote> text.</p>"
