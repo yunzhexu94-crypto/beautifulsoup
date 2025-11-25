@@ -9,7 +9,7 @@ class TestSoupReplacerM3(unittest.TestCase):
 
     def test_case_1_name_xformer_only(self):
         """
-        🧪 Test Case 1: Test name_xformer in isolation.
+         Test Case 1: Test name_xformer in isolation.
         """
         # --- Setup ---
         def b_to_blockquote(tag):
@@ -31,7 +31,7 @@ class TestSoupReplacerM3(unittest.TestCase):
 
     def test_case_2_attrs_xformer_only(self):
         """
-        🧪 Test Case 2: Test attrs_xformer in isolation.
+        Test Case 2: Test attrs_xformer in isolation.
         """
         # --- Setup ---
         def add_class_to_p(tag):
@@ -59,7 +59,7 @@ class TestSoupReplacerM3(unittest.TestCase):
 
     def test_case_3_xformer_only_side_effects(self):
         """
-        🧪 Test Case 3: Test xformer in isolation (for side-effects).
+         Test Case 3: Test xformer in isolation (for side-effects).
         """
         # --- Setup ---
         def remove_class_attr(tag):
@@ -82,7 +82,7 @@ class TestSoupReplacerM3(unittest.TestCase):
 
     def test_case_4_m2_and_m3_name_interaction(self):
         """
-        🧪 Test Case 4: Test M2 and M3 interaction (execution order).
+         Test Case 4: Test M2 and M3 interaction (execution order).
         """
         # --- Setup ---
         # This xformer only activates if the tag name is 'strong'
@@ -108,7 +108,7 @@ class TestSoupReplacerM3(unittest.TestCase):
 
     def test_case_5_m3_all_xformers_chain(self):
         """
-        🧪 Test Case 5: Test chain reaction of all M3 xformers (execution order).
+         Test Case 5: Test chain reaction of all M3 xformers (execution order).
         """
         # --- Setup ---
         def name_changer(tag):
@@ -149,7 +149,7 @@ class TestSoupReplacerM3(unittest.TestCase):
 
     def test_case_6_m2_backward_compatibility_regression(self):
         """
-        🧪 Test Case 6: Test M2 backward compatibility (regression test).
+         Test Case 6: Test M2 backward compatibility (regression test).
         """
         # --- Setup ---
         # Use M2's multiple-pair signature only

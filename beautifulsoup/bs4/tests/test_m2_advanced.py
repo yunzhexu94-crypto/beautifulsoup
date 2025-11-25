@@ -13,14 +13,14 @@ class TestSoupReplacerAdvanced(SoupTest):
         soup = self.soup(markup, soup_replacer=replacer)
 
         # 验证 h1 -> h2
-        assert soup.find("h1") is None, "Should replace h1"
-        assert soup.find("h2") is not None, "Should find h2"
-        assert soup.h2.string == "Title"
+        self.assertIsNone(soup.find("h1"), "Should replace h1")
+        self.assertIsNotNone(soup.find("h2"), "Should find h2")
+        self.assertEqual(soup.h2.string, "Title")
 
         # 验证 i -> em
-        assert soup.find("i") is None, "Should replace i"
-        assert soup.find("em") is not None, "Should find em"
-        assert soup.p.em.string == "italic"
+        self.assertIsNone(soup.find("i"), "Should replace i")
+        self.assertIsNotNone(soup.find("em"), "Should find em")
+        self.assertEqual(soup.p.em.string, "italic")
 
     def test_attributes_are_preserved(self):
         """测试 2: 替换标签名时，原有的属性（class/id等）应该保留"""
@@ -32,16 +32,16 @@ class TestSoupReplacerAdvanced(SoupTest):
         soup = self.soup(markup, soup_replacer=replacer)
 
         # 验证旧标签没了
-        assert soup.find("a") is None
+        self.assertIsNone(soup.find("a"))
 
         # 获取新标签
         new_tag = soup.find("link")
-        assert new_tag is not None
+        self.assertIsNotNone(new_tag)
 
         # 关键验证：属性还在吗？
-        assert new_tag['href'] == "http://example.com"
-        assert new_tag['id'] == "my-link"
-        assert "btn" in new_tag['class']  # class 通常是列表
+        self.assertEqual(new_tag['href'], "http://example.com")
+        self.assertEqual(new_tag['id'], "my-link")
+        self.assertIn("btn", new_tag['class']) # class 通常是列表
 
     def test_unrelated_tags_untouched(self):
         """测试 3: 不在规则里的标签不应受到影响"""
@@ -51,6 +51,7 @@ class TestSoupReplacerAdvanced(SoupTest):
         soup = self.soup(markup, soup_replacer=replacer)
 
         # 验证 div 和 span 还是原来的样子
-        assert soup.find("div") is not None
-        assert soup.find("span") is not None
-        assert soup.div.name == "div"
+        self.assertIsNotNone(soup.find("div"))
+        self.assertIsNotNone(soup.find("span"))
+        self.assertEqual(soup.div.name, "div")
+

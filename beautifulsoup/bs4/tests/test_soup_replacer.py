@@ -11,7 +11,7 @@ class TestSoupReplacer(SoupTest):
         """测试在解析时标签是否被正确替换"""
 
         # 1. 创建一个 replacer
-        replacer = SoupReplacer("b", "blockquote")
+        replacer = SoupReplacer("b","b")
 
         # 2. 准备 HTML 
         markup = "<p>Here is some <b>bold</b> text.</p>"

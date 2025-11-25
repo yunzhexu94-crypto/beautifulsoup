@@ -38,6 +38,7 @@ pytest bs4/tests/
 
 # 运行特定测试文件
 pytest bs4/tests/test_soup_replacer.py -v
+pytest bs4/tests/test_m2_advanced.py -v
 pytest bs4/tests/test_soup_replacer_m3.py -v
 pytest bs4/tests/test_tree.py -v
 
